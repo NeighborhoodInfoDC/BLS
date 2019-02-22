@@ -88,6 +88,9 @@ data BLSallyears ;
 			metro15 = put( ucounty, $ctym15f. );
 		end;
 
+		/*Add formats */
+		format NAICS naics6. Area_Type BLSarea. own BLSown.;
+
 
 run;
 
