@@ -99,6 +99,7 @@ run;
   outlib=BLS,
   label="BLS Annual Wage Data &start_yr. - &end_yr.",
   sortby=year area_code,
+  freqvars=area_type Own Year industry naics,
   restrictions=None,
   revisions=&revisions.
   );
