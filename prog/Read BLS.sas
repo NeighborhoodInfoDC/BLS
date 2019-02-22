@@ -23,7 +23,6 @@ libname BLSraw "L:\Libraries\BLS\Raw";
 %let revisions = New File;
 
 
-%let droplist = Annual_Average_Status_Code;
 
 
 /* Combine and label raw BLS files */
@@ -64,11 +63,12 @@ data BLSallyears ;
 		Annual_Average_Pay = "Average annual pay based on employment and wage levels for a given year."
 		Annual_Average_Weekly_Wage = "Average weekly wage based on the 12-monthly employment levels and total annual wage levels."
 		Annual_Total_Wages = "Sum of the four quarterly total wage levels for a given year"
+		Annual_Average_Employment = "Annual average of monthly employment levels for a given year"
 		Area = "Multi-character area title associated with the area's FIPS code"
 		Area_Code = "5-character FIPS code"
 		Area_Type = "Multi-character area title associated with the area's type"
-		Cnty "3-character County FIPS code"
-		Employment_Location_Quotient_Rel = "1-character location-quotient disclosure code (either '' (blank) or 'N' not disclosed)"
+		Cnty = "3-character County FIPS code"
+		Employment_Location_Quotient_Rel = "Location quotient of annual average establishment count relative to the U.S. (Rounded to the hundredths place)"
 		Industry = "Multi-character industry title associated with the industry code"
 		NAICS = "6-character industry code (NAICS, SuperSector)"
 		Own = "1-character ownership code"
@@ -92,12 +92,32 @@ data BLSallyears ;
 run;
 
 
-/* Finalize data*/
+/* Finalize national data file*/
 %Finalize_data_set( 
   data=BLSallyears,
-  out=BLSallyears,
+  out=BLS_allgeos_country,
   outlib=BLS,
-  label="BLS Annual Wage Data &start_yr. - &end_yr.",
+  label="BLS Annual Wage Data, Entire Country, All Geographies, &start_yr. - &end_yr.",
+  sortby=year area_code,
+  freqvars=area_type Own Year industry naics,
+  restrictions=None,
+  revisions=&revisions.
+  );
+
+
+
+/* Finalize county-level data for DC metro area */
+data BLS_county_was15;
+	set BLSallyears;
+	if put( ucounty, $ctym15f. ) ^= . ;
+run;
+
+
+%Finalize_data_set( 
+  data=BLS_county_was15 ,
+  out=BLS_county_was15,
+  outlib=BLS,
+  label="BLS Annual Wage Data, Washington DC Metro Area Counties, &start_yr. - &end_yr.",
   sortby=year area_code,
   freqvars=area_type Own Year industry naics,
   restrictions=None,
