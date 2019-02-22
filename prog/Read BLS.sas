@@ -22,40 +22,56 @@ libname BLSraw "L:\Libraries\BLS\Raw";
 %let end_yr = 2017;
 %let revisions = New File;
 
+/* Loop through raw data files to fix the numeric/character mismatch */
+%macro varfix;
+%do yr = &start_yr. %to &end_yr.;
 
+data county_&yr._in;
+	set BLSraw.County_2003 (rename = Annual_Average_Status_Code = Annual_Average_Status_Code_in);
+	if Annual_Average_Status_Code_in ^= "N" then do;
+		Annual_Average_Status_Code = " ";
+	end;
+	else do;
+		Annual_Average_Status_Code = Annual_Average_Status_Code_in;
+	end;
+	drop Annual_Average_Status_Code_in;
+run;
 
+%end;
+%mend varfix;
+%varfix;
 
 /* Combine and label raw BLS files */
 data BLSallyears ;
-	length Industry $50. Annual_Average_Weekly_Wage 8.;
-   	set BLSraw.County_1990 (drop= &droplist.)
-		BLSraw.County_1991 (drop= &droplist.)
-		BLSraw.County_1992 (drop= &droplist.)
-		BLSraw.County_1993 (drop= &droplist.)
-		BLSraw.County_1994 (drop= &droplist.)
-		BLSraw.County_1995 (drop= &droplist.)
-		BLSraw.County_1996 (drop= &droplist.)
-		BLSraw.County_1997 (drop= &droplist.)
-       	BLSraw.County_1998 (drop= &droplist.)
-		BLSraw.County_1999 (drop= &droplist.)
-		BLSraw.County_2000 (drop= &droplist.)
-		BLSraw.County_2001 (drop= &droplist.)
-		BLSraw.County_2002 (drop= &droplist.)
-		BLSraw.County_2003 (drop= &droplist.)
-		BLSraw.County_2004 (drop= &droplist.)
-		BLSraw.County_2005 (drop= &droplist.)
-	   	BLSraw.County_2006 (drop= &droplist.)
-		BLSraw.County_2007 (drop= &droplist.)
-		BLSraw.County_2008 (drop= &droplist.)
-		BLSraw.County_2009 (drop= &droplist.)
-		BLSraw.County_2010 (drop= &droplist.)
-		BLSraw.County_2011 (drop= &droplist.)
-		BLSraw.County_2012 (drop= &droplist.)
-		BLSraw.County_2013 (drop= &droplist.)
-	   	BLSraw.County_2014 (drop= &droplist.)
-		BLSraw.County_2015 (drop= &droplist.)
-		BLSraw.County_2016 (drop= &droplist.)
-		BLSraw.County_2017 (drop= &droplist.)
+	length Industry $50. Annual_Average_Weekly_Wage 8. Annual_Average_Status_Code $1.;
+   	set County_1990_in 
+		County_1991_in 
+		County_1992_in 
+		County_1993_in 
+		County_1994_in 
+		County_1995_in 
+		County_1996_in 
+		County_1997_in 
+       	County_1998_in 
+		County_1999_in 
+		County_2000_in 
+		County_2001_in 
+		County_2002_in 
+		County_2003_in 
+		County_2004_in 
+		County_2005_in 
+	   	County_2006_in 
+		County_2007_in 
+		County_2008_in 
+		County_2009_in 
+		County_2010_in 
+		County_2011_in 
+		County_2012_in 
+		County_2013_in 
+	   	County_2014_in 
+		County_2015_in 
+		County_2016_in 
+		County_2017_in 
 		;
 
 		label 
@@ -65,6 +81,7 @@ data BLSallyears ;
 		Annual_Total_Wages = "Sum of the four quarterly total wage levels for a given year"
 		Annual_Average_Employment = "Annual average of monthly employment levels for a given year"
 		Area = "Multi-character area title associated with the area's FIPS code"
+		Annual_Average_Status_Code = "1-character disclosure code (either ' '(blank) or 'N' not disclosed)"
 		Area_Code = "5-character FIPS code"
 		Area_Type = "Multi-character area title associated with the area's type"
 		Cnty = "3-character County FIPS code"
@@ -89,7 +106,7 @@ data BLSallyears ;
 		end;
 
 		/*Add formats */
-		format NAICS naics6. Area_Type BLSarea. own BLSown.;
+		*format NAICS naics6. Area_Type BLSarea. own BLSown.;
 
 
 run;
