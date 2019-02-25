@@ -35,6 +35,8 @@ data county_&yr._in;
 		Annual_Average_Status_Code = Annual_Average_Status_Code_in;
 	end;
 	drop Annual_Average_Status_Code_in;
+
+	if Annual_Average_Status_Code = "." then Annual_Average_Status_Code = " ";
 run;
 
 %end;
