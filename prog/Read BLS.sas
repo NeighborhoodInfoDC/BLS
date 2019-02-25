@@ -27,7 +27,7 @@ libname BLSraw "L:\Libraries\BLS\Raw";
 %do yr = &start_yr. %to &end_yr.;
 
 data county_&yr._in;
-	set BLSraw.County_2003 (rename = Annual_Average_Status_Code = Annual_Average_Status_Code_in);
+	set BLSraw.County_&yr. (rename = Annual_Average_Status_Code = Annual_Average_Status_Code_in);
 	if Annual_Average_Status_Code_in ^= "N" then do;
 		Annual_Average_Status_Code = " ";
 	end;
