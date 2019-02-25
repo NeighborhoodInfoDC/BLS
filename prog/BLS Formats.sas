@@ -28,7 +28,7 @@ run;
 %Data_to_format(
   FmtLib=BLS,
   FmtName=$BLSnaics,
-  Desc=%str(QCEW Industry Codes and Titles (For NAICS Coded Data)),
+  Desc="QCEW Industry Codes and Titles (For NAICS Coded Data)",
   Data=naicslabels,
   Value=industry_code,
   Label=industry_title,
