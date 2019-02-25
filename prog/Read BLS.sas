@@ -106,7 +106,7 @@ data BLSallyears ;
 		end;
 
 		/*Add formats */
-		format NAICS naics6. Area_Type BLSarea. own BLSown.;
+		format NAICS BLSnaics. Area_Type BLSarea. own BLSown.;
 
 
 run;

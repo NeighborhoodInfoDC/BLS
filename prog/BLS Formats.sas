@@ -27,12 +27,12 @@ run;
 /* Create formats from NAICS data */
 %Data_to_format(
   FmtLib=BLS,
-  FmtName=$naics6,
-  Desc=QCEW Industry Codes and Titles (For NAICS Coded Data),
+  FmtName=$BLSnaics,
+  Desc=%str(QCEW Industry Codes and Titles (For NAICS Coded Data)),
   Data=naicslabels,
   Value=industry_code,
   Label=industry_title,
-  OtherLabel='',
+  OtherLabel=,
   DefaultLen=.,
   MaxLen=.,
   MinLen=.,
